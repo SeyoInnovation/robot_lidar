@@ -1,0 +1,25 @@
+- ros_topic_name: /cmd_vel
+  gz_topic_name: /model/robot/cmd_vel  # 替换 robot 为您的模型名
+  direction: ROS_TO_GZ
+  ros_type_name: geometry_msgs/msg/Twist
+  gz_type_name: gz.msgs.Twist
+- ros_topic_name: /odom
+  gz_topic_name: /model/robot/odom
+  direction: GZ_TO_ROS
+  ros_type_name: nav_msgs/msg/Odometry
+  gz_type_name: gz.msgs.Odometry
+- ros_topic_name: /joint_states
+  gz_topic_name: /model/robot/joint_states
+  direction: GZ_TO_ROS
+  ros_type_name: sensor_msgs/msg/JointState
+  gz_type_name: gz.msgs.Model
+- ros_topic_name: /imu/data
+  gz_topic_name: /model/robot/imu/data
+  direction: GZ_TO_ROS
+  ros_type_name: sensor_msgs/msg/Imu
+  gz_type_name: gz.msgs.IMU
+- ros_topic_name: /scan
+  gz_topic_name: /model/robot/scan
+  direction: GZ_TO_ROS
+  ros_type_name: sensor_msgs/msg/LaserScan
+  gz_type_name: gz.msgs.LaserScan

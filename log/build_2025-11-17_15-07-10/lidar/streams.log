@@ -1,0 +1,22 @@
+[2.126s] Invoking command in '/home/xiluo/Swept_lidar/src/lidar': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/xiluo/Swept_lidar/build/lidar/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/xiluo/Swept_lidar/install/lidar/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/lidar build --build-base /home/xiluo/Swept_lidar/build/lidar/build install --record /home/xiluo/Swept_lidar/build/lidar/install.log --single-version-externally-managed install_data
+[2.882s] running egg_info
+[2.928s] writing ../../build/lidar/lidar.egg-info/PKG-INFO
+[2.931s] writing dependency_links to ../../build/lidar/lidar.egg-info/dependency_links.txt
+[2.931s] writing entry points to ../../build/lidar/lidar.egg-info/entry_points.txt
+[2.931s] writing requirements to ../../build/lidar/lidar.egg-info/requires.txt
+[2.932s] writing top-level names to ../../build/lidar/lidar.egg-info/top_level.txt
+[3.050s] reading manifest file '../../build/lidar/lidar.egg-info/SOURCES.txt'
+[3.051s] writing manifest file '../../build/lidar/lidar.egg-info/SOURCES.txt'
+[3.052s] running build
+[3.052s] running build_py
+[3.052s] running install
+[3.067s] running install_lib
+[3.120s] running install_data
+[3.120s] copying launch/start_gazebo.launch.py -> /home/xiluo/Swept_lidar/install/lidar/share/lidar/launch
+[3.121s] running install_egg_info
+[3.179s] removing '/home/xiluo/Swept_lidar/install/lidar/lib/python3.12/site-packages/lidar-0.0.0-py3.12.egg-info' (and everything under it)
+[3.180s] Copying ../../build/lidar/lidar.egg-info to /home/xiluo/Swept_lidar/install/lidar/lib/python3.12/site-packages/lidar-0.0.0-py3.12.egg-info
+[3.182s] running install_scripts
+[3.578s] Installing rotate_wheel script to /home/xiluo/Swept_lidar/install/lidar/lib/lidar
+[3.579s] writing list of installed files to '/home/xiluo/Swept_lidar/build/lidar/install.log'
+[3.633s] Invoked command in '/home/xiluo/Swept_lidar/src/lidar' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/xiluo/Swept_lidar/build/lidar/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/xiluo/Swept_lidar/install/lidar/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/lidar build --build-base /home/xiluo/Swept_lidar/build/lidar/build install --record /home/xiluo/Swept_lidar/build/lidar/install.log --single-version-externally-managed install_data

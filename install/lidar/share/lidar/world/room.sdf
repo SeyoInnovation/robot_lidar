@@ -1,0 +1,223 @@
+<?xml version="1.0" ?>
+<sdf version="1.11">
+  <world name="indoor_room">
+
+    <!-- 地面（深灰色大地板） -->
+    <model name="floor">
+      <static>true</static>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>10 8 0.1</size>   <!-- 10m × 8m × 0.1m -->
+            </box>
+          </geometry>
+          <material>
+            <diffuse>0.4 0.4 0.4 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box><size>10 8 0.1</size></box>
+          </geometry>
+        </collision>
+      </link>
+      <pose>0 0 -0.05 0 0 0</pose>   <!-- 稍微埋一点防止z-fighting -->
+    </model>
+
+    <!-- 四面墙（2.7m 高，带颜色） -->
+    <!-- 前墙 -->
+    <model name="wall_front">
+      <static>true</static>
+      <link name="link">
+        <visual name="visual"><geometry><box><size>10 0.2 2.7</size></box></geometry>
+          <material><diffuse>0.9 0.9 0.85 1</diffuse></material>
+        </visual>
+        <collision name="collision"><geometry><box><size>10 0.2 2.7</size></box></geometry></collision>
+      </link>
+      <pose>0 -4 1.35 0 0 0</pose>
+    </model>
+
+    <!-- 后墙 -->
+    <model name="wall_back">
+      <static>true</static>
+      <link name="link">
+        <visual name="visual"><geometry><box><size>10 0.2 2.7</size></box></geometry>
+          <material><diffuse>0.9 0.9 0.85 1</diffuse></material>
+        </visual>
+        <collision name="collision"><geometry><box><size>10 0.2 2.7</size></box></geometry></collision>
+      </link>
+      <pose>0 4 1.35 0 0 0</pose>
+    </model>
+
+    <!-- 左墙（带门洞） -->
+    <model name="wall_left">
+      <static>true</static>
+      <!-- 左半截墙 -->
+      <link name="left_part">
+        <pose>-3.1 0 1.35 0 0 0</pose>
+        <visual name="v1"><geometry><box><size>3.8 0.2 2.7</size></box></geometry>
+          <material><diffuse>0.9 0.9 0.85 1</diffuse></material>
+        </visual>
+        <collision name="c1"><geometry><box><size>3.8 0.2 2.7</size></box></geometry></collision>
+      </link>
+      <!-- 右半截墙（门上方） -->
+      <link name="right_part">
+        <pose>1.9 0 2.0 0 0 0</pose>
+        <visual name="v2"><geometry><box><size>2.2 0.2 0.7</size></box></geometry>
+          <material><diffuse>0.9 0.9 0.85 1</diffuse></material>
+        </visual>
+        <collision name="c2"><geometry><box><size>2.2 0.2 0.7</size></box></geometry></collision>
+      </link>
+      <pose>-5 0 0 0 0 1.5708</pose>   <!-- 整体绕Z旋转90° -->
+    </model>
+
+    <!-- 右墙 -->
+    <model name="wall_right">
+      <static>true</static>
+      <link name="link">
+        <visual name="visual"><geometry><box><size>8 0.2 2.7</size></box></geometry>
+          <material><diffuse>0.9 0.9 0.85 1</diffuse></material>
+        </visual>
+        <collision name="collision"><geometry><box><size>8 0.2 2.7</size></box></geometry></collision>
+      </link>
+      <pose>5 0 1.35 0 0 1.5708</pose>
+    </model>
+
+    <!-- 天花板 -->
+    <model name="ceiling">
+      <static>true</static>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>10 8 0.15</size></box></geometry>
+          <material><diffuse>0.95 0.95 0.95 1</diffuse></material>
+        </visual>
+      </link>
+      <pose>0 0 2.7 0 0 0</pose>
+    </model>
+
+    <!-- 灯光（模拟室内灯） -->
+    <light name="sun" type="directional">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 -0.5 1.5708</pose>
+      <diffuse>0.9 0.9 0.9 1</diffuse>
+      <specular>0.3 0.3 0.3 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+      <attenuation>
+        <range>100</range>
+        <constant>0.5</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+    </light>
+
+    <!-- 本地桌子：用 box 模拟（木色） -->
+    <model name="simple_table">
+      <static>true</static>
+      <link name="tabletop">
+        <pose>0 0 0.75 0 0 0</pose>  <!-- 桌面高度 0.75m -->
+        <visual name="visual">
+          <geometry>
+            <box><size>1.2 0.8 0.05</size></box>  <!-- 桌面 1.2m x 0.8m x 0.05m -->
+          </geometry>
+          <material>
+            <diffuse>0.6 0.4 0.2 1</diffuse>  <!-- 木色 -->
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry><box><size>1.2 0.8 0.05</size></box></geometry>
+        </collision>
+      </link>
+      <link name="leg1">
+        <pose>-0.5 0.35 0.25 0 0 0</pose>
+        <visual name="visual"><geometry><box><size>0.05 0.05 0.5</size></box></geometry>
+          <material><diffuse>0.6 0.4 0.2 1</diffuse></material>
+        </visual>
+        <collision name="collision"><geometry><box><size>0.05 0.05 0.5</size></box></geometry></collision>
+      </link>
+      <link name="leg2">
+        <pose>0.5 0.35 0.25 0 0 0</pose>
+        <visual name="visual"><geometry><box><size>0.05 0.05 0.5</size></box></geometry>
+          <material><diffuse>0.6 0.4 0.2 1</diffuse></material>
+        </visual>
+        <collision name="collision"><geometry><box><size>0.05 0.05 0.5</size></box></geometry></collision>
+      </link>
+      <link name="leg3">
+        <pose>-0.5 -0.35 0.25 0 0 0</pose>
+        <visual name="visual"><geometry><box><size>0.05 0.05 0.5</size></box></geometry>
+          <material><diffuse>0.6 0.4 0.2 1</diffuse></material>
+        </visual>
+        <collision name="collision"><geometry><box><size>0.05 0.05 0.5</size></box></geometry></collision>
+      </link>
+      <link name="leg4">
+        <pose>0.5 -0.35 0.25 0 0 0</pose>
+        <visual name="visual"><geometry><box><size>0.05 0.05 0.5</size></box></geometry>
+          <material><diffuse>0.6 0.4 0.2 1</diffuse></material>
+        </visual>
+        <collision name="collision"><geometry><box><size>0.05 0.05 0.5</size></box></geometry></collision>
+      </link>
+      <pose>0 1 0 0 0 0</pose>  <!-- 桌子位置 -->
+    </model>
+
+    <!-- 本地椅子：用 cylinder + box 模拟（黑色） -->
+    <model name="simple_chair">
+      <link name="seat">
+        <pose>0 0 0.45 0 0 0</pose>  <!-- 座位高度 0.45m -->
+        <visual name="visual">
+          <geometry>
+            <box><size>0.4 0.4 0.05</size></box>
+          </geometry>
+          <material>
+            <diffuse>0.1 0.1 0.1 1</diffuse>  <!-- 黑色 -->
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry><box><size>0.4 0.4 0.05</size></box></geometry>
+        </collision>
+      </link>
+      <link name="backrest">
+        <pose>0 0.25 0.85 0 0 0</pose>
+        <visual name="visual">
+          <geometry>
+            <box><size>0.4 0.05 0.8</size></box>
+          </geometry>
+          <material><diffuse>0.1 0.1 0.1 1</diffuse></material>
+        </visual>
+        <collision name="collision">
+          <geometry><box><size>0.4 0.05 0.8</size></box></geometry>
+        </collision>
+      </link>
+      <link name="leg1">
+        <pose>-0.15 0.15 0.175 0 0 0</pose>
+        <visual name="visual"><geometry><cylinder><radius>0.025</radius><length>0.35</length></cylinder></geometry>
+          <material><diffuse>0.1 0.1 0.1 1</diffuse></material>
+        </visual>
+        <collision name="collision"><geometry><cylinder><radius>0.025</radius><length>0.35</length></cylinder></geometry></collision>
+      </link>
+      <link name="leg2">
+        <pose>0.15 0.15 0.175 0 0 0</pose>
+        <visual name="visual"><geometry><cylinder><radius>0.025</radius><length>0.35</length></cylinder></geometry>
+          <material><diffuse>0.1 0.1 0.1 1</diffuse></material>
+        </visual>
+        <collision name="collision"><geometry><cylinder><radius>0.025</radius><length>0.35</length></cylinder></geometry></collision>
+      </link>
+      <link name="leg3">
+        <pose>-0.15 -0.15 0.175 0 0 0</pose>
+        <visual name="visual"><geometry><cylinder><radius>0.025</radius><length>0.35</length></cylinder></geometry>
+          <material><diffuse>0.1 0.1 0.1 1</diffuse></material>
+        </visual>
+        <collision name="collision"><geometry><cylinder><radius>0.025</radius><length>0.35</length></cylinder></geometry></collision>
+      </link>
+      <link name="leg4">
+        <pose>0.15 -0.15 0.175 0 0 0</pose>
+        <visual name="visual"><geometry><cylinder><radius>0.025</radius><length>0.35</length></cylinder></geometry>
+          <material><diffuse>0.1 0.1 0.1 1</diffuse></material>
+        </visual>
+        <collision name="collision"><geometry><cylinder><radius>0.025</radius><length>0.35</length></cylinder></geometry></collision>
+      </link>
+      <pose>1.5 1 0 0 0 3.14</pose>  <!-- 椅子位置，面向桌子 -->
+    </model>
+
+  </world>
+</sdf>

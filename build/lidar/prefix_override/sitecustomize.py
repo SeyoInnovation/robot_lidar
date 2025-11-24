@@ -1,4 +1,4 @@
 import sys
 if sys.prefix == '/usr':
     sys.real_prefix = sys.prefix
-    sys.prefix = sys.exec_prefix = '/home/xiluo/Swept_lidar/install/lidar'
+    sys.prefix = sys.exec_prefix = '/home/xiluo/robot_lidar/install/lidar'

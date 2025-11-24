@@ -37,7 +37,7 @@ def generate_launch_description():
                 FindPackageShare('ros_gz_sim').find('ros_gz_sim'),
                 '/launch/gz_sim.launch.py'
             ]),
-            launch_arguments={'gz_args': 'empty.sdf'}.items()
+            launch_arguments={'gz_args': '-r src/lidar/world/demo.sdf'}.items()
         )
     
     # Spawn 模型 加载机器人

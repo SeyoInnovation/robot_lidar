@@ -30,6 +30,7 @@ setup(
     entry_points={
         'console_scripts': [
             'rotate_wheel = lidar.rotate_wheel:main',
+            'vel_to_joint =  lidar.cmd_vel_to_joint_state:main',
         ],
     },
 )

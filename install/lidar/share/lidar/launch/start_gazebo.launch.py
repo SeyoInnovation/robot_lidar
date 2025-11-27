@@ -7,21 +7,28 @@ from launch_ros.actions import Node
 from launch.substitutions import Command, LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
-    package_name = 'lidar' # 设置包名
-    urdf_name = "robot.urdf"
-    # # 配置路径
-    # pkg_share = FindPackageShare(package=package_name).find(package_name) 
-    # urdf_path = os.path.join(pkg_share, f'urdf/{urdf_name}')
-    # 包路径
-    pkg_share = get_package_share_directory('lidar')
-    urdf_path = os.path.join(pkg_share, 'urdf', 'robot.urdf')
-
     # 参数
-    use_sim_time = LaunchConfiguration('use_sim_time', default='true')
+    use_sim_time = LaunchConfiguration('use_sim_time', default='true')          #是否启用仿真时钟
 
+    #------------------------------------------------------------------
+    # 包路径（所有路径都用pkg_share来索引）
+    pkg_share = get_package_share_directory('lidar')        #项目包路径
+    pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')      #gz包路径
+
+    urdf_path = os.path.join(pkg_share, 'urdf', 'robot.urdf.xacro')
+    # 桥接配置文件绝对路径
+    bridge_config = os.path.join(pkg_share, 'config', 'bridge.yaml')
+    # 世界文件绝对路径
+    world_path = os.path.join(pkg_share, 'world', 'demo.sdf')
     # 发布 robot_description
     robot_description_content = Command(['xacro',' ', urdf_path])
-    robot_description = {'robot_description': robot_description_content}
+    robot_description = {
+        'robot_description': robot_description_content
+        }
+    #rviz2参数配置
+    rviz_path = os.path.join(pkg_share,'config','default.rviz')   
+
+    #-----------------------------------------------------------------------
 
     # 机器人状态发布器，发布出话题
     robot_state_publisher = Node(
@@ -33,23 +40,21 @@ def generate_launch_description():
     )
     # 加载场景
     gazebo_server = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([
-                FindPackageShare('ros_gz_sim').find('ros_gz_sim'),
-                '/launch/gz_sim.launch.py'
-            ]),
-            launch_arguments={'gz_args': '-r src/lidar/world/demo.sdf'}.items()
+            PythonLaunchDescriptionSource(
+            os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')
+        ),
+        launch_arguments={'gz_args': ['-r ', world_path]}.items()
         )
     
-    # Spawn 模型 加载机器人
+    # Spawn 模型，加载机器人
     spawn = Node(
         package='ros_gz_sim',
-        executable='create',
-        name='robot',
-        arguments=[
-            '-name', 'robot',  # 您的模型名
-            '-topic', 'robot_description',  # 从 topic 加载 URDF
-            '-x', '0.0', '-y', '0.0', '-z', '0.5'  # 位置
-        ],
+    executable='create',
+    arguments=[
+        '-file', os.path.join(pkg_share, 'urdf', 'robot.urdf.xacro'),  # 直接喂 xacro！
+        '-name', 'robot',
+        '-z', '0.1'
+    ],
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}]
     )
@@ -58,15 +63,39 @@ def generate_launch_description():
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        arguments=['--ros-args', '-p', 'config_file:=src/lidar/config/bridge.yaml'],
-        output='screen'
+        output='screen',
+        parameters=[
+            {'config_file': bridge_config}
+        ]
     )
+    # Launch RViz
+    start_rviz_cmd = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        arguments=['-d', rviz_path]
+        )
+    # 数据转化
+    cmd_vel_to_joint_states = Node(
+            package='lidar',
+            executable='vel_to_joint',
+            name='cmd_vel_to_joint_states',
+            output='screen',
+            parameters=[
+                {'wheel_separation': 0.20},
+                {'wheel_diameter': 0.064},
+                {'cmd_vel_topic': '/cmd_vel'},
+            ]
+        )
 
     return LaunchDescription([
         DeclareLaunchArgument('use_sim_time', default_value='true', description='Use sim time'),
-        DeclareLaunchArgument('world', default_value='empty', description='World file'),
+        # DeclareLaunchArgument('world', default_value='empty', description='World file'),
         robot_state_publisher,
         gazebo_server,
         spawn,
-        bridge
+        bridge,
+        cmd_vel_to_joint_states,
+        start_rviz_cmd
     ])

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="robot">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
 
   <!-- Robot Footprint -->
   <link name="base_footprint"/>
@@ -151,6 +151,7 @@
       <origin xyz="-0.02 0.10 -0.06" />
       <axis xyz="0 1 0" />
       <limit effort="20" velocity="10"/>  <!-- 添加努力限制，支持扭矩 -->
+      <dynamics damping="0.0" friction="0.0"/>
   </joint>
 
   <joint name="right_wheel_joint" type="continuous">
@@ -159,6 +160,7 @@
       <origin xyz="-0.02 -0.10 -0.06" />
       <axis xyz="0 1 0" />
       <limit effort="20" velocity="10"/>  <!-- 添加努力限制，支持扭矩 -->
+      <dynamics damping="0.0" friction="0.0"/>
   </joint>
 
   <link name="caster_link">
@@ -215,7 +217,7 @@
       <always_on>true</always_on>
       <update_rate>100</update_rate>
       <visualize>true</visualize>
-      <topic>/modle/robot/imu</topic>  <!-- 输出话题 -->
+      <topic>/robot/imu</topic>  <!-- 输出话题 -->
       <imu>
         <angular_velocity>
           <x>
@@ -279,7 +281,7 @@
       <always_on>true</always_on>
       <visualize>true</visualize>
       <update_rate>5</update_rate>
-      <topic>/model/robot/scan</topic>  <!-- 输出话题 -->
+      <topic>/scan</topic>  <!-- 输出话题 -->
       <lidar>  <!-- 替换原 <ray> -->
         <scan>
           <horizontal>
@@ -314,13 +316,15 @@
       <remapping>odom:=odom</remapping>
     </ros>
 
+    <publish_joint_state>true</publish_joint_state>       
+    <joint_state_topic>/joint_states</joint_state_topic>
     <!-- 左右轮关节名（必须和你 URDF 里完全一模一样！） -->
     <left_joint>left_wheel_joint</left_joint>
     <right_joint>right_wheel_joint</right_joint>
 
     <!-- 物理参数（必须和实际模型一致！） -->
-    <wheel_separation>0.38</wheel_separation>      <!-- 两轮中心距离，单位：米 -->
-    <wheel_diameter>0.065</wheel_diameter>         <!-- 轮子直径，单位：米 -->
+    <wheel_separation>0.20</wheel_separation>      <!-- 两轮中心距离，单位：米 -->
+    <wheel_diameter>0.064</wheel_diameter>         <!-- 轮子直径，单位：米 -->
 
     <!-- 限制（根据你的电机调整） -->
     <max_wheel_torque>20</max_wheel_torque>
@@ -330,9 +334,9 @@
     <!-- 发布设置（关键！） -->
     <publish_odom>true</publish_odom>
     <publish_odom_tf>true</publish_odom_tf>        <!-- 发布 odom → base_footprint 的 TF -->
-    <publish_wheel_tf>false</publish_wheel_tf>     <!-- 一般设 false，轮子 TF 不需要 -->
+    <publish_wheel_tf>true</publish_wheel_tf>     <!-- 一般设 false，轮子 TF 不需要 -->
 
-    <!-- TF 帧名（必须和你 URDF + base_footprint 一致！） -->
+    <!-- TF 帧名 -->
     <odometry_frame>odom</odometry_frame>
     <robot_base_frame>base_footprint</robot_base_frame>
 
@@ -340,13 +344,14 @@
     <odom_publisher_frequency>50</odom_publisher_frequency>
   </plugin>
 
-  <!-- 2. 关节状态发布插件（可选，如果你桥接了 /joint_states 就留着） -->
-  <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+  <!-- 2. 关节状态发布插件 -->
+  <!-- <plugin filename="gz-sim-joint-state-publisher-system" 
+          name="gz::sim::systems::JointStatePublisher">
     <topic>/joint_states</topic>
     <joint_name>left_wheel_joint</joint_name>
     <joint_name>right_wheel_joint</joint_name>
-    <!-- 如果你还有云台等关节，继续加 <joint_name>xxx</joint_name> -->
-  </plugin>
+    <include_all_joints>true</include_all_joints>
+  </plugin> -->
 </gazebo>
 
 </robot>

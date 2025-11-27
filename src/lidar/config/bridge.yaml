@@ -3,23 +3,27 @@
   direction: ROS_TO_GZ
   ros_type_name: geometry_msgs/msg/Twist
   gz_type_name: gz.msgs.Twist
+# 里程计
 - ros_topic_name: /odom
   gz_topic_name: /model/robot/odom
   direction: GZ_TO_ROS
   ros_type_name: nav_msgs/msg/Odometry
   gz_type_name: gz.msgs.Odometry
+#关节姿态
 - ros_topic_name: /joint_states
   gz_topic_name: /model/robot/joint_states
   direction: GZ_TO_ROS
   ros_type_name: sensor_msgs/msg/JointState
   gz_type_name: gz.msgs.Model
-- ros_topic_name: /imu/data
+# imu数据
+- ros_topic_name: /robot/imu
   gz_topic_name: /model/robot/imu/data
   direction: GZ_TO_ROS
   ros_type_name: sensor_msgs/msg/Imu
   gz_type_name: gz.msgs.IMU
+# 激光雷达
 - ros_topic_name: /scan
-  gz_topic_name: /model/robot/scan
+  gz_topic_name: /scan
   direction: GZ_TO_ROS
   ros_type_name: sensor_msgs/msg/LaserScan
   gz_type_name: gz.msgs.LaserScan

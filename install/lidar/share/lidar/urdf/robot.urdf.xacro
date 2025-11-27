@@ -280,8 +280,10 @@
     <sensor name="laser_sensor" type="gpu_lidar">
       <always_on>true</always_on>
       <visualize>true</visualize>
-      <update_rate>5</update_rate>
+      <update_rate>10</update_rate>
+
       <topic>/scan</topic>  <!-- 输出话题 -->
+      
       <lidar>  <!-- 替换原 <ray> -->
         <scan>
           <horizontal>
@@ -318,6 +320,7 @@
 
     <publish_joint_state>true</publish_joint_state>       
     <joint_state_topic>/joint_states</joint_state_topic>
+
     <!-- 左右轮关节名（必须和你 URDF 里完全一模一样！） -->
     <left_joint>left_wheel_joint</left_joint>
     <right_joint>right_wheel_joint</right_joint>

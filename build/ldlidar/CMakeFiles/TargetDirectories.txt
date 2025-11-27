@@ -1,0 +1,10 @@
+/home/xiluo/robot_lidar/build/ldlidar/CMakeFiles/uninstall.dir
+/home/xiluo/robot_lidar/build/ldlidar/CMakeFiles/ldlidar_uninstall.dir
+/home/xiluo/robot_lidar/build/ldlidar/CMakeFiles/ldlidar.dir
+/home/xiluo/robot_lidar/build/ldlidar/CMakeFiles/test.dir
+/home/xiluo/robot_lidar/build/ldlidar/CMakeFiles/edit_cache.dir
+/home/xiluo/robot_lidar/build/ldlidar/CMakeFiles/rebuild_cache.dir
+/home/xiluo/robot_lidar/build/ldlidar/CMakeFiles/list_install_components.dir
+/home/xiluo/robot_lidar/build/ldlidar/CMakeFiles/install.dir
+/home/xiluo/robot_lidar/build/ldlidar/CMakeFiles/install/local.dir
+/home/xiluo/robot_lidar/build/ldlidar/CMakeFiles/install/strip.dir

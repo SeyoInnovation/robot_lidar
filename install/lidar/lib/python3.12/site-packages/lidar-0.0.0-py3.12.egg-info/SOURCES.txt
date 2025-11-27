@@ -11,10 +11,12 @@ setup.py
 config/bridge.yaml
 config/default.rviz
 launch/display_rviz2.launch.py
+launch/slam.launch.py
 launch/start.launch.py
 launch/start_gazebo.launch.py
 lidar/__init__.py
 lidar/cmd_vel_to_joint_state.py
+lidar/odom_sim.py
 lidar/rotate_wheel.py
 resource/lidar
 test/test_copyright.py

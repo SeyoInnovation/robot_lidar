@@ -1,1 +1,0 @@
-Invoking command in '/home/xiluo/Swept_lidar/build/ldlidar': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/xiluo/Swept_lidar/src/ldlidar_port -DCMAKE_INSTALL_PREFIX=/home/xiluo/Swept_lidar/install/ldlidar

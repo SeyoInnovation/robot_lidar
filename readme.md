@@ -31,4 +31,7 @@ sudo apt install ros-jazzy-cartographer-ros
 里程计的数据从仿真来？
 
 teleop_twist_keyboard可以使用这个来控制机器人
+
+ros2 run tf2_tools view_frames
+用来查看tf树
 ## 测试：代码在ubuntun20.04foxy版本下测试，使用rviz可视化。

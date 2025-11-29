@@ -32,7 +32,7 @@ def generate_launch_description():
       parameters=[
         {'product_name': 'LDLiDAR_LD14P'},
         {'topic_name': 'scan'},
-        {'port_name': '/dev/serial'},
+        {'port_name': '/dev/ttyACM0'},
         {'frame_id': 'base_laser'},
         {'laser_scan_dir': True},
         {'enable_angle_crop_func': False},#单角度裁剪开关：值为False时表示不使用多角度裁剪，默认为False

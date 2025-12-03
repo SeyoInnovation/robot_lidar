@@ -1,4 +1,6 @@
 [console_scripts]
 odom = lidar.odom_sim:main
+odometry_pub = lidar.odometry_pub:main
 rotate_wheel = lidar.rotate_wheel:main
+serial_read = lidar.serial_read:main
 vel_to_joint = lidar.cmd_vel_to_joint_state:main

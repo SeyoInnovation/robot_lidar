@@ -34,7 +34,7 @@ class FakeOdomNode(Node):
             Twist, '/cmd_vel', self.cmd_vel_callback, 10)
 
         # 50Hz 发布假里程计
-        self.timer = self.create_timer(0.02, self.publish_odom)
+        self.timer = self.create_timer(0.01, self.publish_odom)
 
         self.get_logger().info("假里程计节点已启动！用键盘或 joy 发 /cmd_vel 就能动了")
 

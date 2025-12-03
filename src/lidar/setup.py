@@ -15,6 +15,10 @@ setup(
         (os.path.join('share', package_name, 'urdf'), glob('urdf/**')),
         (os.path.join('share', package_name, 'config'), glob('config/**')),
         (os.path.join('share', package_name, 'world'), glob('world/**')),
+        ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
+        ('share/' + package_name, ['package.xml']),
+        # 必须手动把所有 .msg 文件列出来
+        (os.path.join('share', package_name, 'msg'), glob('msg/*.msg')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -33,6 +37,7 @@ setup(
             'vel_to_joint =  lidar.cmd_vel_to_joint_state:main',
             'odom = lidar.odom_sim:main',
             'serial_read = lidar.serial_read:main',
+            'odometry_pub = lidar.odometry_pub:main',
         ],
     },
 )

@@ -38,30 +38,17 @@ def generate_launch_description():
         )
     
     # 调用slam_toolbox建图
-    Slam = Node(
-        package='slam_toolbox',
-        executable='async_slam_toolbox_node',
-        name='slam_toolbox',
-        output='screen',
-        remappings=[
-            ('scan', '/scan'),
-            ('odom', '/odom'),
-        ],
-        parameters=[
-            {
-                'use_sim_time': False,
-                'odom_frame': 'odom',
-                'map_frame': 'map',
-                'base_frame': 'base_link',
-                'scan_topic': '/scan',
-                'mode': 'mapping',
-                'minimum_travel_distance': 0.01,
-                'minimum_travel_heading': 0.01,
-                'transform_publish_period': 0.02,
-                'resolution': 0.05,
-            }
-        ]
+    Slam = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            get_package_share_directory('slam_toolbox'),
+            '/launch/online_async_launch.py'
+        ]),
+        launch_arguments={
+            'slam_params_file': os.path.join(pkg_share, 'config', 'slam.yaml'),
+            'use_sim_time': 'false'
+        }.items()
     )
+
     # Launch RViz
     start_rviz_cmd = Node(
         package='rviz2',

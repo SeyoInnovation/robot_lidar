@@ -14,7 +14,6 @@ def generate_launch_description():
     pkg_share = get_package_share_directory('lidar') 
     #rviz2参数配置
     rviz_path = os.path.join(pkg_share,'config','slam.rviz') 
-    param_file = os.path.join(pkg_share, 'config', 'slam_toolbox_params.yaml')
     # 启动里程计
     odom = Node(
         package='lidar',          

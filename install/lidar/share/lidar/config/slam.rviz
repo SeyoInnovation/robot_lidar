@@ -66,7 +66,7 @@ Visualization Manager:
       Max Color: 255; 255; 255
       Max Intensity: 218
       Min Color: 0; 0; 0
-      Min Intensity: 90
+      Min Intensity: 192
       Name: LaserScan
       Position Transformer: XYZ
       Selectable: true

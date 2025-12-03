@@ -12,12 +12,11 @@
 /home/xiluo/robot_lidar/install/lidar/share/lidar/launch/display_rviz2.launch.py
 /home/xiluo/robot_lidar/install/lidar/share/lidar/launch/start_gazebo.launch.py
 /home/xiluo/robot_lidar/install/lidar/share/lidar/launch/start.launch.py
-/home/xiluo/robot_lidar/install/lidar/share/lidar/launch/slam2.launch.py
 /home/xiluo/robot_lidar/install/lidar/share/lidar/urdf/robot.urdf.xacro
 /home/xiluo/robot_lidar/install/lidar/share/lidar/urdf/demo.urdf.xacro
+/home/xiluo/robot_lidar/install/lidar/share/lidar/config/slam.rviz
 /home/xiluo/robot_lidar/install/lidar/share/lidar/config/bridge.yaml
 /home/xiluo/robot_lidar/install/lidar/share/lidar/config/default.rviz
-/home/xiluo/robot_lidar/install/lidar/share/lidar/config/slam.yaml
 /home/xiluo/robot_lidar/install/lidar/share/lidar/world/demo.sdf
 /home/xiluo/robot_lidar/install/lidar/share/lidar/world/room.sdf
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar-0.0.0-py3.12.egg-info/requires.txt

@@ -13,8 +13,7 @@ def generate_launch_description():
     # 包位置
     pkg_share = get_package_share_directory('lidar') 
     #rviz2参数配置
-    rviz_path = os.path.join(pkg_share,'config','lidar.rviz') 
-    param_file = os.path.join(pkg_share, 'config', 'slam_toolbox_params.yaml')
+    rviz_path = os.path.join(pkg_share,'config','slam.rviz') 
     # 启动里程计
     odom = Node(
         package='lidar',          
@@ -39,31 +38,30 @@ def generate_launch_description():
         )
     
     # 调用slam_toolbox建图
-    Slam = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            get_package_share_directory('slam_toolbox'),
-            '/launch/online_async_launch.py'
-        ]),
-        launch_arguments={
-            'slam_params_file': os.path.join(pkg_share, 'config', 'slam.yaml'),
-            'use_sim_time': 'false'
-        }.items()
+    Slam = Node(
+        package='slam_toolbox',
+        executable='async_slam_toolbox_node',
+        name='slam_toolbox',
+        output='screen',
+        remappings=[
+            ('scan', '/scan'),
+            ('odom', '/odom'),
+        ],
+        parameters=[
+            {
+                'use_sim_time': False,
+                'odom_frame': 'odom',
+                'map_frame': 'map',
+                'base_frame': 'base_link',
+                'scan_topic': '/scan',
+                'mode': 'mapping',
+                'minimum_travel_distance': 0.01,
+                'minimum_travel_heading': 0.01,
+                'transform_publish_period': 0.02,
+                'resolution': 0.05,
+            }
+        ]
     )
-
-    # static_tf_laser = Node(
-    #     package='tf2_ros',
-    #     executable='static_transform_publisher',
-    #     name='static_transform_publisher_laser',
-    #     arguments=['0', '0', '0.1', '0', '0', '0', 'base_link', 'laser']
-    # )
-    
-    # # 静态TF发布 - 定义base_link到odom的初始位置
-    # static_tf_odom = Node(
-    #     package='tf2_ros',
-    #     executable='static_transform_publisher',
-    #     name='static_transform_publisher_odom',
-    #     arguments=['0', '0', '0', '0', '0', '0', 'odom', 'base_link']
-    # )
     # Launch RViz
     start_rviz_cmd = Node(
         package='rviz2',

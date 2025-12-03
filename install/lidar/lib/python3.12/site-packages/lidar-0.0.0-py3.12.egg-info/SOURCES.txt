@@ -10,10 +10,9 @@ setup.py
 ../../build/lidar/lidar.egg-info/zip-safe
 config/bridge.yaml
 config/default.rviz
-config/slam.yaml
+config/slam.rviz
 launch/display_rviz2.launch.py
 launch/slam.launch.py
-launch/slam2.launch.py
 launch/start.launch.py
 launch/start_gazebo.launch.py
 lidar/__init__.py

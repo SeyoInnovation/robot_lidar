@@ -1,84 +1,136 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import rclpy
 from rclpy.node import Node
-from uart_msg.msg import WheelData
+from uart_msg.msg import WheelData       
 import serial
 import struct
+from datetime import datetime
+
 
 class RawSerialNode(Node):
     def __init__(self):
         super().__init__('raw_serial_node')
 
+        # 参数（可以通过 launch 文件或命令行覆盖）
         self.declare_parameter('port', '/dev/ttyUSB0')
-        self.declare_parameter('baudrate', 115200)
-        self.declare_parameter('motor1_is_left', True)   # 改这里决定谁是左轮
+        self.declare_parameter('baudrate', 38400)        
+        self.declare_parameter('motor1_is_left', True)    # Motor1 是左轮？
 
         port = self.get_parameter('port').value
         baud = self.get_parameter('baudrate').value
         self.motor1_is_left = self.get_parameter('motor1_is_left').value
 
-        self.ser = serial.Serial(port, baud, timeout=0.05)
-        self.get_logger().info(f"串口 {port} 已打开 @ {baud}")
+        # 打开串口（阻塞读更稳定）
+        self.ser = serial.Serial(
+            port=port,
+            baudrate=baud,
+            bytesize=serial.EIGHTBITS,
+            parity=serial.PARITY_NONE,
+            stopbits=serial.STOPBITS_ONE,
+            timeout=None                     
+        )
 
+        self.get_logger().info(f"串口已打开 → {port} @ {baud} bps")
+
+        # 发布者
         self.pub = self.create_publisher(WheelData, 'wheel_raw_data', 10)
 
-        self.create_timer(0.002, self.read_loop)  # 500Hz 轮询
+        # 缓冲区
+        self.buffer = bytearray()
+
+        # 1ms 轮询一次（足够快）
+        self.create_timer(0.001, self.read_loop)
 
     def read_loop(self):
-        # 找帧头
-        if self.ser.read(2) != b'\xAA\x55':
-            return
+        # 把串口里所有数据一次性读进来
+        if self.ser.in_waiting > 0:
+            self.buffer.extend(self.ser.read(self.ser.in_waiting))
 
-        data = self.ser.read(31)
-        if len(data) < 31 or data[-2:] != b'\x55\xAA':
-            return
+        while len(self.buffer) >= 33:
+            # 1. 找帧头 AA55
+            idx = self.buffer.find(b'\xAA\x55')
+            if idx == -1:                        
+                self.buffer.clear()
+                return
 
-        payload = data[:-3]
-        recv_chksum = data[-3]
+            if idx > 0:                              
+                self.buffer = self.buffer[idx:]
+                if len(self.buffer) < 33:
+                    return
 
-        calc_chksum = 0
-        for b in payload[:28]:
-            calc_chksum ^= b
-        if calc_chksum != recv_chksum:
-            return
+            frame = self.buffer[:33]
 
-        # 解包 7 个 float（小端）
-        m1_v, m1_s, m2_v, m2_s, gx, gy, gz = struct.unpack('<7f', payload[:28])
+            # 2. 检查帧尾 55AA
+            if frame[-2:] != b'\x55\xAA':
+                self.buffer.pop(0)                     
+                continue
 
-        msg = WheelData()
-        msg.header.stamp = self.get_clock().now().to_msg()
-        msg.header.frame_id = "base_link"
+            # 3. 校验（异或 28 字节数据，索引 2~29）
+            calc_sum = 0
+            for b in frame[2:30]:
+                calc_sum ^= b
 
-        # 根据参数决定左右轮映射
-        if self.motor1_is_left:
-            msg.left_velocity  = m1_v
-            msg.right_velocity = m2_v
-            msg.left_distance  = m1_s
-            msg.right_distance = m2_s
-        else:
-            msg.left_velocity  = m2_v
-            msg.right_velocity = m1_v
-            msg.left_distance  = m2_s
-            msg.right_distance = m1_s
+            if calc_sum != frame[30]:
+                self.get_logger().warn(
+                    f"校验失败 → 收到 0x{frame[30]:02X}  计算 0x{calc_sum:02X}"
+                )
+                self.buffer.pop(0)
+                continue
 
-        msg.gyro_x = gx
-        msg.gyro_y = gy
-        msg.gyro_z = gz
+            # ------------------- 到这里说明一帧完全正确 -------------------
+            self.buffer = self.buffer[33:]             # 丢掉已处理的 33 字节
 
-        self.pub.publish(msg)
-        self.get_logger().info(f"Published raw data: vL={msg.left_velocity:.3f}, vR={msg.right_velocity:.3f}")
+            # 4. 解析 7 个 float（小端）
+            m1_v, m1_s, m2_v, m2_s, gx, gy, gz = struct.unpack('<7f', frame[2:30])
 
-def main():
-    rclpy.init()
+            # 5. 填充并发布 ROS2 消息
+            msg = WheelData()
+            msg.header.stamp = self.get_clock().now().to_msg()
+            msg.header.frame_id = "base_link"
+
+            if self.motor1_is_left:
+                msg.left_velocity   = m1_v
+                msg.right_velocity  = m2_v
+                msg.left_distance   = m1_s
+                msg.right_distance  = m2_s
+            else:
+                msg.left_velocity   = m2_v
+                msg.right_velocity  = m1_v
+                msg.left_distance   = m2_s
+                msg.right_distance  = m1_s
+
+            msg.gyro_x = gx
+            msg.gyro_y = gy
+            msg.gyro_z = gz
+
+            self.pub.publish(msg)
+
+            now = datetime.now().strftime("%H:%M:%S.%f")[:-3]
+            self.get_logger().info(
+                f"[{now}] "
+                f"Lv:{msg.left_velocity:7.3f} m/s  "
+                f"Rv:{msg.right_velocity:7.3f} m/s  |  "
+                f"Ld:{msg.left_distance:8.3f} m  "
+                f"Rd:{msg.right_distance:8.3f} m  |  "
+                f"GX:{gx:7.2f}  GY:{gy:7.2f}  GZ:{gz:7.2f} °/s"
+            )
+
+
+def main(args=None):
+    rclpy.init(args=args)
     node = RawSerialNode()
+
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
-        pass
+        node.get_logger().info("节点被用户手动停止")
     finally:
         node.ser.close()
         node.destroy_node()
         rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()

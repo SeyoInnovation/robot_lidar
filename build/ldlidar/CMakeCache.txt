@@ -254,13 +254,13 @@ FastRTPS_LIBRARY_DEBUG:FILEPATH=FastRTPS_LIBRARY_DEBUG-NOTFOUND
 FastRTPS_LIBRARY_RELEASE:FILEPATH=/opt/ros/jazzy/lib/libfastrtps.so
 
 //Path to a library.
-OPENSSL_CRYPTO_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libcrypto.so
+OPENSSL_CRYPTO_LIBRARY:FILEPATH=/usr/lib/aarch64-linux-gnu/libcrypto.so
 
 //Path to a file.
 OPENSSL_INCLUDE_DIR:PATH=/usr/include
 
 //Path to a library.
-OPENSSL_SSL_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libssl.so
+OPENSSL_SSL_LIBRARY:FILEPATH=/usr/lib/aarch64-linux-gnu/libssl.so
 
 //Arguments to supply to pkg-config
 PKG_CONFIG_ARGN:STRING=
@@ -269,10 +269,10 @@ PKG_CONFIG_ARGN:STRING=
 PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
 
 //Name of the computer/site where compile is being run
-SITE:STRING=xiluo-ThinkStation-K-C2490
+SITE:STRING=xiluo-desktop
 
 //The directory containing a CMake configuration file for TinyXML2.
-TinyXML2_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+TinyXML2_DIR:PATH=/usr/lib/aarch64-linux-gnu/cmake/tinyxml2
 
 //Path to a library.
 _lib:FILEPATH=/opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_fastrtps_cpp.so
@@ -413,10 +413,10 @@ ldlidar_SOURCE_DIR:STATIC=/home/xiluo/robot_lidar/src/ldlidar
 libstatistics_collector_DIR:PATH=/opt/ros/jazzy/share/libstatistics_collector/cmake
 
 //Path to a library.
-pkgcfg_lib__OPENSSL_crypto:FILEPATH=/usr/lib/x86_64-linux-gnu/libcrypto.so
+pkgcfg_lib__OPENSSL_crypto:FILEPATH=/usr/lib/aarch64-linux-gnu/libcrypto.so
 
 //Path to a library.
-pkgcfg_lib__OPENSSL_ssl:FILEPATH=/usr/lib/x86_64-linux-gnu/libssl.so
+pkgcfg_lib__OPENSSL_ssl:FILEPATH=/usr/lib/aarch64-linux-gnu/libssl.so
 
 //The directory containing a CMake configuration file for rcl.
 rcl_DIR:PATH=/opt/ros/jazzy/share/rcl/cmake
@@ -679,7 +679,7 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding FastRTPS
 FIND_PACKAGE_MESSAGE_DETAILS_FastRTPS:INTERNAL=[/opt/ros/jazzy/include][/opt/ros/jazzy/lib/libfastrtps.so;/opt/ros/jazzy/lib/libfastcdr.so][v(2.13)]
 //Details about finding OpenSSL
-FIND_PACKAGE_MESSAGE_DETAILS_OpenSSL:INTERNAL=[/usr/lib/x86_64-linux-gnu/libcrypto.so][/usr/include][c ][v3.0.13()]
+FIND_PACKAGE_MESSAGE_DETAILS_OpenSSL:INTERNAL=[/usr/lib/aarch64-linux-gnu/libcrypto.so][/usr/include][c ][v3.0.13()]
 //Details about finding Python3
 FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/usr/bin/python3][cfound components: Interpreter ][v3.12.3()]
 //ADVANCED property for variable: OPENSSL_CRYPTO_LIBRARY
@@ -700,11 +700,11 @@ _OPENSSL_CFLAGS_OTHER:INTERNAL=
 _OPENSSL_FOUND:INTERNAL=1
 _OPENSSL_INCLUDEDIR:INTERNAL=/usr/include
 _OPENSSL_INCLUDE_DIRS:INTERNAL=/usr/include
-_OPENSSL_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu;-lssl;-lcrypto
+_OPENSSL_LDFLAGS:INTERNAL=-L/usr/lib/aarch64-linux-gnu;-lssl;-lcrypto
 _OPENSSL_LDFLAGS_OTHER:INTERNAL=
-_OPENSSL_LIBDIR:INTERNAL=/usr/lib/x86_64-linux-gnu
+_OPENSSL_LIBDIR:INTERNAL=/usr/lib/aarch64-linux-gnu
 _OPENSSL_LIBRARIES:INTERNAL=ssl;crypto
-_OPENSSL_LIBRARY_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu
+_OPENSSL_LIBRARY_DIRS:INTERNAL=/usr/lib/aarch64-linux-gnu
 _OPENSSL_LIBS:INTERNAL=
 _OPENSSL_LIBS_L:INTERNAL=
 _OPENSSL_LIBS_OTHER:INTERNAL=
@@ -715,11 +715,11 @@ _OPENSSL_STATIC_CFLAGS:INTERNAL=-I/usr/include
 _OPENSSL_STATIC_CFLAGS_I:INTERNAL=
 _OPENSSL_STATIC_CFLAGS_OTHER:INTERNAL=
 _OPENSSL_STATIC_INCLUDE_DIRS:INTERNAL=/usr/include
-_OPENSSL_STATIC_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu;-lssl;-L/usr/lib/x86_64-linux-gnu;-ldl;-pthread;-lcrypto;-ldl;-pthread
+_OPENSSL_STATIC_LDFLAGS:INTERNAL=-L/usr/lib/aarch64-linux-gnu;-lssl;-L/usr/lib/aarch64-linux-gnu;-ldl;-pthread;-lcrypto;-ldl;-pthread
 _OPENSSL_STATIC_LDFLAGS_OTHER:INTERNAL=-pthread;-pthread
 _OPENSSL_STATIC_LIBDIR:INTERNAL=
 _OPENSSL_STATIC_LIBRARIES:INTERNAL=ssl;dl;crypto;dl
-_OPENSSL_STATIC_LIBRARY_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu;/usr/lib/x86_64-linux-gnu
+_OPENSSL_STATIC_LIBRARY_DIRS:INTERNAL=/usr/lib/aarch64-linux-gnu;/usr/lib/aarch64-linux-gnu
 _OPENSSL_STATIC_LIBS:INTERNAL=
 _OPENSSL_STATIC_LIBS_L:INTERNAL=
 _OPENSSL_STATIC_LIBS_OTHER:INTERNAL=
@@ -736,7 +736,7 @@ _Python3_Development_REASON_FAILURE:INTERNAL=
 //Path to a program.
 _Python3_EXECUTABLE:INTERNAL=/usr/bin/python3
 //Python3 Properties
-_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;12;3;64;32;;cpython-312-x86_64-linux-gnu;abi3;/usr/lib/python3.12;/usr/lib/python3.12;/usr/local/lib/python3.12/dist-packages;/usr/local/lib/python3.12/dist-packages
+_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;12;3;64;32;;cpython-312-aarch64-linux-gnu;abi3;/usr/lib/python3.12;/usr/lib/python3.12;/usr/local/lib/python3.12/dist-packages;/usr/local/lib/python3.12/dist-packages
 _Python3_INTERPRETER_SIGNATURE:INTERNAL=4c8bfa8951e99fa32e4000a94f8c04a2
 //NumPy reason failure
 _Python3_NumPy_REASON_FAILURE:INTERNAL=
@@ -746,5 +746,5 @@ __pkg_config_checked__OPENSSL:INTERNAL=1
 pkgcfg_lib__OPENSSL_crypto-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib__OPENSSL_ssl
 pkgcfg_lib__OPENSSL_ssl-ADVANCED:INTERNAL=1
-prefix_result:INTERNAL=/usr/lib/x86_64-linux-gnu
+prefix_result:INTERNAL=/usr/lib/aarch64-linux-gnu
 

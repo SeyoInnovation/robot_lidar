@@ -38,6 +38,7 @@ setup(
             'odom = lidar.odom_sim:main',
             'serial_read = lidar.serial_read:main',
             'odometry_pub = lidar.odometry_pub:main',
+            'operator = lidar.operator:main',
         ],
     },
 )

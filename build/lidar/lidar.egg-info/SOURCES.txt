@@ -13,6 +13,7 @@ config/default.rviz
 config/slam.rviz
 config/slam.yaml
 launch/display_rviz2.launch.py
+launch/serial.launch.py
 launch/slam.launch.py
 launch/start.launch.py
 launch/start_gazebo.launch.py
@@ -20,6 +21,7 @@ lidar/__init__.py
 lidar/cmd_vel_to_joint_state.py
 lidar/odom_sim.py
 lidar/odometry_pub.py
+lidar/operator.py
 lidar/rotate_wheel.py
 lidar/serial_read.py
 msg/WheelData.msg

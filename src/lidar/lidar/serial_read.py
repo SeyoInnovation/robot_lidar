@@ -17,7 +17,7 @@ class RawSerialNode(Node):
         # 参数（可以通过 launch 文件或命令行覆盖）
         self.declare_parameter('port', '/dev/ttyUSB0')
         self.declare_parameter('baudrate', 38400)        
-        self.declare_parameter('motor1_is_left', True)    # Motor1 是左轮？
+        self.declare_parameter('motor1_is_left', True)    
 
         port = self.get_parameter('port').value
         baud = self.get_parameter('baudrate').value
@@ -52,20 +52,12 @@ class RawSerialNode(Node):
         self.create_timer(0.001, self.read_loop)
 
     # 发送函数
-    def send_pubdata_frame(self, int1: int, int2: int):
-        """
-        构造一帧完整的33字节下行帧：
-        AA 55
-        int1 (4字节小端)
-        int2 (4字节小端)
-        后面20字节补0（保持原来结构）
-        校验（索引2~29异或）
-        55 AA
-        """
-        # 前8字节是我们要发的两个int32
-        payload = struct.pack(int1, int2)
+    def send_pubdata_frame(self, int1: input):
+        # 4字节一个int
+        format_str = "<I"
+        payload = struct.pack(format_str,int1)
 
-        # 计算校验（和接收时完全一致：第2~29字节异或）
+        # 计算校验
         checksum = 0
         for b in payload:
             checksum ^= b
@@ -79,16 +71,16 @@ class RawSerialNode(Node):
 
         try:
             self.ser.write(frame)
-            self.get_logger().info(f"下发成功 → int1={int1} (0x{int1:08X})  int2={int2} (0x{int2:08X})")
+            self.get_logger().info(f"下发成功 → int1={int1} (0x{int1:08X})")
         except Exception as e:
             self.get_logger().error(f"串口发送失败: {e}")
 
     # 处理受到的指令
     def pubdata_callback(self, msg: Int32MultiArray):
             int1 = msg.data[0] if len(msg.data) >= 1 else 0
-            int2 = msg.data[1] if len(msg.data) >= 2 else 0
+            # int2 = msg.data[1] if len(msg.data) >= 2 else 0
 
-            self.send_pubdata_frame(int1, int2)
+            self.send_pubdata_frame(int1)
 
     def read_loop(self):
         # 把串口里所有数据一次性读进来
@@ -139,7 +131,7 @@ class RawSerialNode(Node):
 
             if self.motor1_is_left:
                 msg.left_velocity   = m1_v
-                msg.right_velocity  = m2_v
+                msg.right_velocity  = -m2_v # 右轮数据相反
                 msg.left_distance   = m1_s
                 msg.right_distance  = m2_s
             else:

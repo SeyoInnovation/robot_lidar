@@ -1,16 +1,12 @@
-/home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/rotate_wheel.py
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/operator.py
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/odom_sim.py
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/odometry_pub.py
-/home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/cmd_vel_to_joint_state.py
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/__init__.py
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/serial_read.py
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/msg/__init__.py
-/home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/__pycache__/rotate_wheel.cpython-312.pyc
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/__pycache__/operator.cpython-312.pyc
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/__pycache__/odom_sim.cpython-312.pyc
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/__pycache__/odometry_pub.cpython-312.pyc
-/home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/__pycache__/cmd_vel_to_joint_state.cpython-312.pyc
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/__pycache__/__init__.cpython-312.pyc
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/__pycache__/serial_read.cpython-312.pyc
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/msg/__pycache__/__init__.cpython-312.pyc
@@ -25,8 +21,10 @@
 /home/xiluo/robot_lidar/install/lidar/share/lidar/urdf/robot.urdf.xacro
 /home/xiluo/robot_lidar/install/lidar/share/lidar/config/slam.yaml
 /home/xiluo/robot_lidar/install/lidar/share/lidar/config/default.rviz
+/home/xiluo/robot_lidar/install/lidar/share/lidar/config/my_nav2_params.yaml
 /home/xiluo/robot_lidar/install/lidar/share/lidar/config/bridge.yaml
 /home/xiluo/robot_lidar/install/lidar/share/lidar/config/slam.rviz
+/home/xiluo/robot_lidar/install/lidar/share/lidar/config/mapper_params_online_async.yaml
 /home/xiluo/robot_lidar/install/lidar/share/lidar/world/demo.sdf
 /home/xiluo/robot_lidar/install/lidar/share/lidar/world/room.sdf
 /home/xiluo/robot_lidar/install/lidar/share/lidar/msg/WheelData.msg

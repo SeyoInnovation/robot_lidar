@@ -37,3 +37,32 @@ ros2 run tf2_tools view_frames
 
 # 实时建图launch:slam.launch.py
 # 串口通讯文件：serial.launch.py
+数据接收的话题：wheel_raw_data
+里程计话题：odom
+接收发送的话题：pub_data
+查看建图结果：eog /home/xiluo/robot_lidar/maps/my_room.pgm
+
+启动命令分别为
+### 底盘
+:~/robot_ws$ python3 src/my_robot_control/my_robot_control/base_driver.py
+
+### 雷达
+~/robot_lidar$ ros2 launch ldlidar ld14p.launch.py port_name:=/dev/ttyACM0
+
+### base_footprint到base_link的tf变换
+ros2 run tf2_ros static_transform_publisher --x 0 --y 0 --z 0 --yaw 0 --pitch 0 --roll 0 --frame-id base_link --child-frame-id base_footprint
+
+### slam toolbox建图
+ros2 launch slam_toolbox online_async_launch.py
+
+### 两轮机器人控制移动
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+
+### 保存地图
+ros2 run nav2_map_server map_saver_cli -f ~/robot_ws/maps/my_room --ros-args -p save_map_timeout:=10000.0
+
+### 完整建图launch
+ros2 launch my_robot_control mapping.launch.py
+
+### 完整定位launch
+ros2 launch my_robot_control nav_bringup.launch.py

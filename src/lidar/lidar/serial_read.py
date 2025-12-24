@@ -5,10 +5,12 @@ import rclpy
 from rclpy.node import Node
 from uart_msg.msg import WheelData       
 from std_msgs.msg import Int32MultiArray
+from geometry_msgs.msg import Twist, TransformStamped
 import serial
 import struct
 from datetime import datetime
 
+WHEELBASE = 0.177
 
 class RawSerialNode(Node):
     def __init__(self):
@@ -22,7 +24,9 @@ class RawSerialNode(Node):
         port = self.get_parameter('port').value
         baud = self.get_parameter('baudrate').value
         self.motor1_is_left = self.get_parameter('motor1_is_left').value
-
+        # 初始化变量
+        self.vx = 0.0
+        self.vth = 0.0
         # 打开串口
         self.ser = serial.Serial(
             port=port,
@@ -39,49 +43,42 @@ class RawSerialNode(Node):
         self.pub = self.create_publisher(WheelData, 'wheel_raw_data', 10)
 
         # 订阅待发送的数据
-        self.sub_pubdata = self.create_subscription(
-            Int32MultiArray,
-            '/pub_data',
-            self.pubdata_callback,
-            10
-        )
-        self.get_logger().info("已订阅 /pub_data 话题（Int32MultiArray），收到即下发")
-
+        self.sub_pubdata = self.create_subscription(Twist, '/cmd_vel', self.cmd_vel_callback, 10)
+        self.get_logger().info("已订阅 /cmd_vel 话题（Twist），收到即下发")
+        # 用定时器发送
+        self.create_timer(0.02, self.hardware_sync_loop)
         # 缓冲区
         self.buffer = bytearray()
         self.create_timer(0.001, self.read_loop)
 
-    # 发送函数
-    def send_pubdata_frame(self, int1: input):
-        # 4字节一个int
-        format_str = "<I"
-        payload = struct.pack(format_str,int1)
+    # Ros2 -> Stm32    
+    def cmd_vel_callback(self, msg):
+        self.vx = msg.linear.x
+        self.vth = msg.angular.z
 
-        # 计算校验
-        checksum = 0
-        for b in payload:
-            checksum ^= b
-
-        # 组完整帧
-        frame = bytearray()
-        frame.extend(b'\xAA\x55')
-        frame.extend(payload)
-        frame.append(checksum)
-        frame.extend(b'\x55\xAA')
-
+    def hardware_sync_loop(self):
+        """核心循环：计算差速并将所有状态打包发送至 STM32"""
+        v_l = self.vx - self.vth * (WHEELBASE / 2.0)
+        v_r = self.vx + self.vth * (WHEELBASE / 2.0)
+        
+        # 物理补偿 (使用你最新的调试值)
+        v_r = v_r * 1.0
+        v_l = v_l * 1.0
+        
         try:
-            self.ser.write(frame)
-            self.get_logger().info(f"下发成功 → int1={int1} (0x{int1:08X})")
+            header = bytearray([0xAA, 0x55])
+            # 打包数据
+            payload = struct.pack('<ff', v_l, v_r)
+            
+            check = 0
+            for b in payload: check ^= b
+            
+            tail = bytearray([check, 0x55, 0xAA])
+            self.ser.write(header + payload + tail)
         except Exception as e:
-            self.get_logger().error(f"串口发送失败: {e}")
+            self.get_logger().error(f"发送异常: {e}")
 
-    # 处理受到的指令
-    def pubdata_callback(self, msg: Int32MultiArray):
-            int1 = msg.data[0] if len(msg.data) >= 1 else 0
-            # int2 = msg.data[1] if len(msg.data) >= 2 else 0
-
-            self.send_pubdata_frame(int1)
-
+    # Stm32 -> Ros2
     def read_loop(self):
         # 把串口里所有数据一次性读进来
         if self.ser.in_waiting > 0:
@@ -117,10 +114,7 @@ class RawSerialNode(Node):
                 )
                 self.buffer.pop(0)
                 continue
-
-            # ------------------- 到这里说明一帧完全正确 -------------------
-            self.buffer = self.buffer[33:]             # 丢掉已处理的 33 字节
-
+            self.buffer = self.buffer[33:]             
             # 4. 解析 7 个 float（小端）
             m1_v, m1_s, m2_v, m2_s, gx, gy, gz = struct.unpack('<7f', frame[2:30])
 
@@ -133,7 +127,7 @@ class RawSerialNode(Node):
                 msg.left_velocity   = m1_v
                 msg.right_velocity  = -m2_v # 右轮数据相反
                 msg.left_distance   = m1_s
-                msg.right_distance  = m2_s
+                msg.right_distance  = -m2_s
             else:
                 msg.left_velocity   = m2_v
                 msg.right_velocity  = m1_v

@@ -10,6 +10,8 @@ setup.py
 ../../build/lidar/lidar.egg-info/zip-safe
 config/bridge.yaml
 config/default.rviz
+config/mapper_params_online_async.yaml
+config/my_nav2_params.yaml
 config/slam.rviz
 config/slam.yaml
 launch/display_rviz2.launch.py
@@ -18,11 +20,9 @@ launch/slam.launch.py
 launch/start.launch.py
 launch/start_gazebo.launch.py
 lidar/__init__.py
-lidar/cmd_vel_to_joint_state.py
 lidar/odom_sim.py
 lidar/odometry_pub.py
 lidar/operator.py
-lidar/rotate_wheel.py
 lidar/serial_read.py
 msg/WheelData.msg
 msg/__init__.py

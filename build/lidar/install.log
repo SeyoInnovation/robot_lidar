@@ -1,10 +1,8 @@
-/home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/operator.py
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/odom_sim.py
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/odometry_pub.py
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/__init__.py
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/serial_read.py
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/msg/__init__.py
-/home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/__pycache__/operator.cpython-312.pyc
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/__pycache__/odom_sim.cpython-312.pyc
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/__pycache__/odometry_pub.cpython-312.pyc
 /home/xiluo/robot_lidar/install/lidar/lib/python3.12/site-packages/lidar/__pycache__/__init__.cpython-312.pyc
@@ -13,10 +11,9 @@
 /home/xiluo/robot_lidar/install/lidar/share/ament_index/resource_index/packages/lidar
 /home/xiluo/robot_lidar/install/lidar/share/lidar/package.xml
 /home/xiluo/robot_lidar/install/lidar/share/lidar/launch/start.launch.py
-/home/xiluo/robot_lidar/install/lidar/share/lidar/launch/slam.launch.py
+/home/xiluo/robot_lidar/install/lidar/share/lidar/launch/nav.launch.py
 /home/xiluo/robot_lidar/install/lidar/share/lidar/launch/serial.launch.py
 /home/xiluo/robot_lidar/install/lidar/share/lidar/launch/start_gazebo.launch.py
-/home/xiluo/robot_lidar/install/lidar/share/lidar/launch/display_rviz2.launch.py
 /home/xiluo/robot_lidar/install/lidar/share/lidar/urdf/demo.urdf.xacro
 /home/xiluo/robot_lidar/install/lidar/share/lidar/urdf/robot.urdf.xacro
 /home/xiluo/robot_lidar/install/lidar/share/lidar/config/slam.yaml

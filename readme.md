@@ -59,10 +59,13 @@ ros2 launch slam_toolbox online_async_launch.py
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 
 ### 保存地图
-ros2 run nav2_map_server map_saver_cli -f ~/robot_ws/maps/my_room --ros-args -p save_map_timeout:=10000.0
+ros2 run nav2_map_server map_saver_cli -f ~/robot_lidar/maps/my_room --ros-args -p save_map_timeout:=10000.0
 
 ### 完整建图launch
 ros2 launch my_robot_control mapping.launch.py
 
 ### 完整定位launch
 ros2 launch my_robot_control nav_bringup.launch.py
+
+### 开启web socket
+ros2 launch rosbridge_server rosbridge_websocket_launch.xml delay_between_messages:=0.0

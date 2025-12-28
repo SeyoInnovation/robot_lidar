@@ -6,7 +6,6 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
-from launch.launch_description_sources import AnyLaunchDescriptionSource
 from launch_ros.substitutions import FindPackageShare
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
@@ -14,20 +13,11 @@ from ament_index_python.packages import get_package_share_directory
 def generate_launch_description():
     # ==================== 参数和包路径 ====================
     package_name = 'lidar'  # 你的包名
-    rosbridge_dir = get_package_share_directory('rosbridge_server')
-    launch_file_path = os.path.join(rosbridge_dir, 'launch', 'rosbridge_websocket_launch.xml')
-    # 声明 launch 参数
-    lidar_port_arg = DeclareLaunchArgument(
-        name='lidar_port',
-        default_value='/dev/ttyACM0',
-        description='LIDAR serial port (e.g., /dev/ttyACM0)'
-    )
-
-    use_rviz_arg = DeclareLaunchArgument(
-        name='use_rviz',
-        default_value='true',
-        description='Whether to start RViz'
-    )
+    my_pkg_dir = get_package_share_directory(package_name)
+    nav2_bringup_dir = get_package_share_directory('nav2_bringup')
+    # 导航配置文件路径
+    map_file = os.path.join(os.path.expanduser('~'), 'robot_lidar', 'my_room.yaml')
+    params_file = os.path.join(my_pkg_dir, 'config', 'my_nav2_params.yaml')
 
     # ==================== 节点和 launch 包含 ====================
 
@@ -43,11 +33,10 @@ def generate_launch_description():
         package=package_name,
         executable='odometry_pub',  # 你的里程计发布节点
         name='odometry_publisher',
-        output='screen',
-        parameters=[{'wheelbase': 0.177}]  # 传递轮距参数
+        output='screen'
     )
 
-    # 2. 静态 TF: base_link → base_laser (雷达相对于机器人中心)
+    # 2.TF: base_link → base_laser (雷达相对于机器人中心)
     tf_base_to_laser = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
@@ -56,7 +45,7 @@ def generate_launch_description():
         output='screen'
     )
 
-    # 3. 静态 TF: base_link → base_footprint (通常在地面下方)
+    # 3. TF: base_link → base_footprint (通常在地面下方)
     tf_base_to_footprint = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
@@ -74,40 +63,23 @@ def generate_launch_description():
                     'ld14p.launch.py'  
                 )
             )
-        )
-
-    # 5. slam_toolbox 在线异步建图
-    slam_params_file = os.path.join(
-        get_package_share_directory(package_name),
-        'config',
-        'mapper_params_online_async.yaml'
     )
 
-    slam_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare('slam_toolbox'),
-                'launch',
-                'online_async_launch.py'
-            ])
-        ]),
+    # 5. Nav2 启动文件
+    nav2_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(nav2_bringup_dir, 'launch', 'bringup_launch.py')
+        ),
         launch_arguments={
-            'slam_params_file': slam_params_file
+            'map': map_file,
+            'params_file': params_file,
+            'use_sim_time': 'false', 
+            'autostart': 'true'
         }.items()
     )
-    # 6. 启动web_socket操控
-    web = IncludeLaunchDescription(
-            AnyLaunchDescriptionSource(launch_file_path),
-            launch_arguments={
-                'delay_between_messages': '0.0'
-            }.items()
-        )
+
     # ==================== 组装 LaunchDescription ====================
     ld = LaunchDescription()
-
-    # 添加参数声明
-    ld.add_action(lidar_port_arg)
-    ld.add_action(use_rviz_arg)
 
     # 添加所有节点和子 launch
     ld.add_action(serial_port_node)
@@ -115,7 +87,6 @@ def generate_launch_description():
     ld.add_action(tf_base_to_laser)
     ld.add_action(tf_base_to_footprint)
     ld.add_action(ldlidar_start)
-    ld.add_action(slam_launch)
-    ld.add_action(web)
+    ld.add_action(nav2_launch)
 
     return ld
